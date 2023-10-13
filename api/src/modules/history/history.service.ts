@@ -4,6 +4,7 @@ import {
   CREATE_SUCCESS,
   ERROR_NAME_TAKEN,
   ERROR_NOT_FOUND_DATA,
+  ERROR_NOT_FOUND_STORY,
   UPDATE_ACTIVE_SUCCESS,
   UPDATE_SUCCESS,
   enumData,
@@ -25,7 +26,7 @@ export class HistoryService {
   /** Thêm mới dữ liệu */
   public async createData(user: UserDto, data: HistoryCreateDto) {
     const foundChapter = await this.chapterRepo.findOne({ where: { id: data.chapterId } })
-    if (!foundChapter) throw new Error('Không tìm thấy chapter')
+    if (!foundChapter) throw new Error(ERROR_NOT_FOUND_STORY)
     const foundHistory = await this.repo.findOne({
       where: { userId: user.id, chapter: { storyId: foundChapter.storyId } },
       relations: {

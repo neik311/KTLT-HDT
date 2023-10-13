@@ -4,6 +4,7 @@ import {
   CREATE_SUCCESS,
   ERROR_NAME_TAKEN,
   ERROR_NOT_FOUND_DATA,
+  ERROR_NOT_FOUND_STORY,
   UPDATE_ACTIVE_SUCCESS,
   UPDATE_SUCCESS,
 } from './../../constants/index'
@@ -24,7 +25,7 @@ export class FavoriteService {
         id: data.storyId,
       },
     })
-    if (!foundStory) throw new Error('Không tìm thấy truyện')
+    if (!foundStory) throw new Error(ERROR_NOT_FOUND_STORY)
     const newFavorite = new FavoriteEntity()
     newFavorite.userId = user.id
     newFavorite.storyId = data.storyId

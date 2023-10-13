@@ -1,9 +1,10 @@
 import { Like, IsNull } from 'typeorm'
 import {
-  ACTION_SUCCESS,
   CREATE_SUCCESS,
-  ERROR_NAME_TAKEN,
+  ERROR_NOT_FOUND_COMMENT,
   ERROR_NOT_FOUND_DATA,
+  ERROR_NOT_FOUND_STORY,
+  ERROR_NOT_FOUND_USER,
   UPDATE_ACTIVE_SUCCESS,
   UPDATE_SUCCESS,
 } from './../../constants/index'
@@ -26,9 +27,9 @@ export class CommentService {
       lstTask.push(this.repo.findOne({ where: { id: data.parentId, isDeleted: false, parentId: IsNull() }, select: { id: true } }))
     }
     const [isTakenUser, isTakenStory, isTakenParent] = await Promise.all(lstTask)
-    if (!isTakenUser) throw new Error('Không tìm thấy người dùng')
-    if (!isTakenStory) throw new Error('Không tìm thấy truyện')
-    if (data.parentId && !isTakenParent) throw new Error('Không tìm thấy bình luận cha')
+    if (!isTakenUser) throw new Error(ERROR_NOT_FOUND_STORY)
+    if (!isTakenStory) throw new Error(ERROR_NOT_FOUND_USER)
+    if (data.parentId && !isTakenParent) throw new Error(ERROR_NOT_FOUND_COMMENT)
 
     const newComment = new CommentEntity()
     newComment.userId = user.id

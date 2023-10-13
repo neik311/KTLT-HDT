@@ -1,11 +1,13 @@
 import {
   ACTION_SUCCESS,
   ERROR_CHECK_PASSWORD,
-  ERROR_CODE_TAKEN,
+  ERROR_CHECK_VERIFY_CODE,
+  ERROR_CREATE_USER,
   ERROR_INPUT_EMAIL_PASSWORD,
   ERROR_INPUT_EMAIL_USERNAME,
   ERROR_LOCK_ACCOUNT,
   ERROR_NOT_FOUND_DATA,
+  ERROR_TIME_VERIFY_CODE,
   ERROR_VERIFY_ACCOUNT,
   UPDATE_ACTIVE_SUCCESS,
 } from './../../constants/index'
@@ -37,9 +39,7 @@ export class AuthService {
     }
 
     const foundRole = await this.roleRepo.findOne({ where: { code: enumData.Role.User.code } })
-    if (!foundRole) {
-      throw new Error('Đã xảy ra lỗi khi thiết lập tài khoản người dùng')
-    }
+    if (!foundRole)  throw new Error(ERROR_CREATE_USER)
 
     let newUserEntity = foundUser ? foundUser : new UserEntity()
     newUserEntity.email = data.email
@@ -80,10 +80,10 @@ export class AuthService {
       this.verifyRepo.find({ where: { email: data.email }, order: { timeStart: 'desc' } }),
     ])
     if (!foundUser) throw new Error(ERROR_NOT_FOUND_DATA)
-    if (foundCode[0].code !== data.code) throw new Error('Mã xác thực không chính xác')
+    if (foundCode[0].code !== data.code) throw new Error(ERROR_CHECK_VERIFY_CODE)
     if (foundCode[0].timeExpired.getTime() < new Date().getTime()) {
       await this.verifyRepo.delete({ email: data.email })
-      throw new Error('Mã đã hết hạn')
+      throw new Error(ERROR_TIME_VERIFY_CODE)
     }
     await this.repo.update({ email: data.email }, { verified: true })
     await this.verifyRepo.delete({ email: data.email })
@@ -97,10 +97,10 @@ export class AuthService {
       this.verifyRepo.find({ where: { email: data.email }, order: { timeStart: 'desc' } }),
     ])
     if (!foundUser) throw new Error(ERROR_NOT_FOUND_DATA)
-    if (foundCode[0].code !== data.code) throw new Error('Mã xác thực không chính xác')
+    if (foundCode[0].code !== data.code) throw new Error(ERROR_CHECK_VERIFY_CODE)
     if (foundCode[0].timeExpired.getTime() < new Date().getTime()) {
       await this.verifyRepo.delete({ email: data.email })
-      throw new Error('Mã đã hết hạn')
+      throw new Error(ERROR_TIME_VERIFY_CODE)
     }
     foundUser.password = data.password
     foundUser.updatedAt = new Date()

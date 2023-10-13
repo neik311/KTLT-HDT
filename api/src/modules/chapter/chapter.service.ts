@@ -1,9 +1,9 @@
-import { Like, IsNull } from 'typeorm'
 import {
-  ACTION_SUCCESS,
   CREATE_SUCCESS,
-  ERROR_NAME_TAKEN,
+  ERROR_CHAPTER_NUMBER_TAKEN,
+  ERROR_IS_DELETED_DATA,
   ERROR_NOT_FOUND_DATA,
+  ERROR_NOT_FOUND_STORY,
   UPDATE_ACTIVE_SUCCESS,
   UPDATE_SUCCESS,
 } from './../../constants/index'
@@ -24,8 +24,8 @@ export class ChapterService {
     ]
 
     const [isTakenChapter, isTakenStory] = await Promise.all(lstTask)
-    if (isTakenChapter) throw new Error('Số thứ tự chapter đã tồn tại')
-    if (!isTakenStory) throw new Error('Không tìm thấy truyện')
+    if (isTakenChapter) throw new Error(ERROR_CHAPTER_NUMBER_TAKEN)
+    if (!isTakenStory) throw new Error(ERROR_NOT_FOUND_STORY)
 
     await this.repo.manager.transaction(async (trans) => {
       const repo = trans.getRepository(ChapterEntity)
@@ -47,7 +47,7 @@ export class ChapterService {
     if (!foundChapter) throw new Error(ERROR_NOT_FOUND_DATA)
     if (foundChapter.chapterNumber !== data.chapterNumber) {
       const isTaken = await this.repo.findOne({ where: { storyId: data.storyId, chapterNumber: data.chapterNumber } })
-      if (isTaken) throw new Error('Số thứ tự chapter đã tồn tại')
+      if (isTaken) throw new Error(ERROR_CHAPTER_NUMBER_TAKEN)
     }
     await this.repo.manager.transaction(async (trans) => {
       const repo = trans.getRepository(ChapterEntity)
@@ -68,7 +68,7 @@ export class ChapterService {
   public async updateActive(user: UserDto, data: FilterOneDto) {
     const foundChapter: any = await this.repo.findOne({ where: { id: data.id }, relations: { story: true } })
     if (!foundChapter) throw new Error(ERROR_NOT_FOUND_DATA)
-    if (foundChapter.__story__.isDeleted === true) throw new Error('Truyện đã bị ngưng hoạt động')
+    if (foundChapter.__story__.isDeleted === true) throw new Error(ERROR_IS_DELETED_DATA)
     const newIsDeleted = !foundChapter.isDeleted
     await this.repo.update({ id: data.id }, { isDeleted: newIsDeleted })
     return { message: UPDATE_ACTIVE_SUCCESS }

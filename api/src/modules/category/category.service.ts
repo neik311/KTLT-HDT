@@ -2,6 +2,7 @@ import { Like } from 'typeorm'
 import {
   ACTION_SUCCESS,
   CREATE_SUCCESS,
+  ERROR_DELETE_CATEGORY,
   ERROR_NAME_TAKEN,
   ERROR_NOT_FOUND_DATA,
   UPDATE_ACTIVE_SUCCESS,
@@ -56,7 +57,7 @@ export class CategoryService {
       this.cateStoryRepo.findOne({ where: { categoryId: data.id, isDeleted: false }, select: { id: true } }),
     ])
     if (!foundCategory) throw new Error(ERROR_NOT_FOUND_DATA)
-    if (foundStory) throw new Error('Danh mục có truyện đang hoạt động, không thể xóa')
+    if (foundStory) throw new Error(ERROR_DELETE_CATEGORY)
     const newIsDeleted = !foundCategory.isDeleted
     await this.repo.update({ id: data.id }, { isDeleted: newIsDeleted })
     return { message: UPDATE_ACTIVE_SUCCESS }

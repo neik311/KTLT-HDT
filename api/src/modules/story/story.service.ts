@@ -1,7 +1,5 @@
 import { In, Like } from 'typeorm'
 import {
-  ACTION_SUCCESS,
-  ERROR_CODE_TAKEN,
   CREATE_SUCCESS,
   ERROR_NAME_TAKEN,
   ERROR_NOT_FOUND_DATA,
@@ -11,6 +9,7 @@ import {
   ERROR_NOT_FOUND_CATEGORY,
   ERROR_VAL_STORYTYPE,
   ERROR_INPUT_CATEGORY,
+  ERROR_IS_DELETED_DATA,
 } from './../../constants/index'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { CategoryRepository, CategoryStoryRepository, StoryRepository, ChapterRepository, HistoryRepository } from '../../repositories'
@@ -72,15 +71,15 @@ export class StoryService {
 
   public async updateData(user: UserDto, data: StoryUpdateDto) {
     data.name = coreHelper.formatName(data.name)
-    if (!data.lstCategoryId || data.lstCategoryId.length === 0) throw new Error('Hãy chọn một danh mục')
-    if (data.type !== enumData.StoryType.comic.code && data.type !== enumData.StoryType.word.code) throw new Error('Loại truyện không hợp lệ')
+    if (!data.lstCategoryId || data.lstCategoryId.length === 0) throw new Error(ERROR_INPUT_CATEGORY)
+    if (data.type !== enumData.StoryType.comic.code && data.type !== enumData.StoryType.word.code) throw new Error(ERROR_VAL_STORYTYPE)
     const [foundStory, lstCategory] = await Promise.all([
       this.repo.findOne({ where: { id: data.id } }),
       this.cateRepo.find({ where: { id: In(data.lstCategoryId), isDeleted: false }, select: { id: true } }),
     ])
     if (!foundStory) throw new Error(ERROR_NOT_FOUND_DATA)
-    if (foundStory.isDeleted) throw new Error('Truyện đã bị ngưng hoạt động')
-    if (lstCategory && lstCategory.length !== data.lstCategoryId.length) throw new Error('Danh mục không tồn tại hoặc đã bị ngưng hoạt động')
+    if (foundStory.isDeleted) throw new Error(ERROR_IS_DELETED_DATA)
+    if (lstCategory && lstCategory.length !== data.lstCategoryId.length) throw new Error(ERROR_NOT_FOUND_CATEGORY)
     if (foundStory.name !== data.name) {
       const isTaken = await this.repo.findOne({ where: { name: data.name, type: data.type }, select: { name: true } })
       if (isTaken) throw new Error(ERROR_NAME_TAKEN)
@@ -124,40 +123,6 @@ export class StoryService {
     return { message: UPDATE_ACTIVE_SUCCESS }
   }
 
-  /** Phân trang */
-  // public async pagination(data: PaginationDto) {
-  //   const whereCon: any = {}
-  //   if (data.where.isDeleted != undefined) whereCon.isDeleted = data.where.isDeleted
-  //   if (data.where.name) whereCon.name = Like(`%${data.where.name}%`)
-
-  //   const res: any[] = await this.repo.findAndCount({
-  //     where: whereCon,
-  //     skip: data.skip,
-  //     take: data.take,
-  //     relations: { chapters: true, comments: true, favorites: true },
-  //     order: { createdAt: 'DESC' },
-  //   })
-  //   for (let item of res[0]) {
-  //     const foundCate: any[] = await this.cateStoryRepo.find({ where: { storyId: item.id, isDeleted: false }, relations: { category: true } })
-  //     item.lstCategoryName = foundCate.map((cate: any) => cate.__category__.name)
-  //     item.lstCategoryId = foundCate.map((cate: any) => cate.__category__.id)
-  //     if (item.__chapters__) {
-  //       let totalView = 0
-  //       for (let chapter of item.__chapters__) {
-  //         totalView += chapter.viewCount
-  //       }
-  //       item.totalView = totalView
-  //       item.chapterCount = item.__chapters__.length
-  //     }
-  //     if (item.__comments__) item.commentCount = item.__comments__.length
-  //     if (item.__favorites__) item.favoriteCount = item.__favorites__.length
-  //     item.typeName = enumData.StoryType[item.type].name
-  //     delete item.__comments__
-  //     delete item.__favorites__
-  //     delete item.__chapters__
-  //   }
-  //   return res
-  // }
 
   public async pagination(data: PaginationDto) {
     const sortBy = data.where.sortBy || 'updatedAt'

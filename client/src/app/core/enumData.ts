@@ -48,11 +48,3 @@ export const enumData = {
     comic: { code: 'comic', name: 'Truyện tranh' },
   },
 }
-
-export const NOT_YET_USERNAME = 'Vui lòng nhập email'
-export const NOT_YET_PASSWORD = 'Vui lòng nhập mật khẩu'
-export const ERR_VAL_PASSWORD = 'Vui lòng nhập mật khẩu đúng định dạng'
-export const ERR_CONFIRM_PASSWORD = 'Mật khẩu nhập lại không chính xác'
-export const NOT_YET_STORYNAME = 'Vui lòng nhập tên truyện'
-export const NOT_YET_STORYTYPE = 'Vui lòng chọn loại truyện'
-export const NOT_YET_CATEGORY = 'Vui lòng chọn danh mục'

@@ -66,11 +66,11 @@ export class AuthService {
 
     const isPasswordMatch = await foundUser.comparePassword(data.password)
     if (!isPasswordMatch) throw new UnauthorizedException(ERROR_CHECK_PASSWORD)
-    foundUser.roleCode = foundUser.__role__.code
-    foundUser.roleName = foundUser.__role__.name
+    foundUser.roleCode = foundUser?.__role__?.code
+    foundUser.roleName = foundUser?.__role__?.name
     delete foundUser.password
     delete foundUser.__role__
-    return { ...foundUser, accessToken: this.jwtService.sign({ uid: foundUser.id }) }
+    return { ...foundUser, accessToken: this.jwtService?.sign({ uid: foundUser.id }) }
   }
 
   /** Xác thực email */

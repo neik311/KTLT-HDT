@@ -164,6 +164,7 @@ export class ChapterService {
     })
     if (!foundChapter) throw new Error(ERROR_NOT_FOUND_DATA)
     foundChapter.viewCount += 1
-    this.repo.save(foundChapter)
+    await this.repo.save(foundChapter)
+    return {message: UPDATE_SUCCESS}
   }
 }

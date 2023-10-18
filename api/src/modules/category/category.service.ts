@@ -22,8 +22,10 @@ export class CategoryService {
   /** Thêm mới dữ liệu */
   public async createData(user: UserDto, data: CategoryCreateDto) {
     data.name = coreHelper.formatName(data.name)
+
     const isTaken = await this.repo.findOne({ where: { name: data.name }, select: { id: true } })
     if (isTaken) throw new Error(ERROR_NAME_TAKEN)
+    
     const newCategory = new CategoryEntity()
     newCategory.name = data.name
     newCategory.description = data.description

@@ -3,7 +3,7 @@ import { AngularFireStorage } from '@angular/fire/compat/storage'
 import { ApiService, CoreService, NotifyService } from '../../../../services'
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog'
 import { enumData } from '../../../../core/enumData'
-import {NOT_YET_AVATAR, NOT_YET_CATEGORY, NOT_YET_STORYNAME} from '../../../../core/constants'
+import {NOT_YET_AVATAR, NOT_YET_CATEGORY, NOT_YET_STORYNAME,NOT_YET_STORYTYPE} from '../../../../core/constants'
 
 @Component({
   templateUrl: './add-or-edit-story.component.html',
@@ -23,6 +23,9 @@ export class AddOrEditStoryComponent implements OnInit {
   lstCategory: any[] = []
   lstStoryType: any[] = []
   modalTitle = 'Thêm mới truyện'
+  NOT_YET_STORYNAME = NOT_YET_STORYNAME
+  NOT_YET_STORYTYPE=NOT_YET_STORYTYPE
+  NOT_YET_CATEGORY=NOT_YET_CATEGORY
 
   constructor(
     private notifyService: NotifyService,

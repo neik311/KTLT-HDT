@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { Router } from '@angular/router'
 import { ApiService, AuthenticationService, CoreService, NotifyService } from '../../services'
-import { ACTION_LOGIN_SUCCESS } from 'src/app/core/constants'
+import { ACTION_LOGIN_SUCCESS, NOT_YET_PASSWORD, NOT_YET_USERNAME } from 'src/app/core/constants'
 
 @Component({
   selector: 'app-login',
@@ -24,6 +24,14 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit() {
+    if(!this.username){
+      this.notifyService.showError(NOT_YET_USERNAME)
+      return
+    }
+    if(!this.password){
+      this.notifyService.showError(NOT_YET_PASSWORD)
+      return
+    }
     this.notifyService.showloading()
     this.apiService.post(this.apiService.AUTH.LOGIN, { username: this.username, email: this.username, password: this.password }).then((res: any) => {
       this.authService.login(res)

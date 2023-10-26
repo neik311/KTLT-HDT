@@ -26,6 +26,7 @@ export const ACTION_SUCCESS = process.env.ACTION_SUCCESS || 'Thao tác thành c�
 export const DEFAULT_CONNECTION_NAME =process.env.DEFAULT_CONNECTION_NAME ||  'default'
 export const DATA_SOURCE = process.env.DATA_SOURCE || 'DATA_SOURCE'
 export const TYPEORM_EX_CUSTOM_REPOSITORY = process.env.TYPEORM_EX_CUSTOM_REPOSITORY || 'TYPEORM_EX_CUSTOM_REPOSITORY'
+export const AUTHOR_ERROR = process.env.AUTHOR_ERROR || 'Không có quyền truy cập!'
 
 /** user error */
 export const ERROR_CHECK_PASSWORD = process.env.ERROR_CHECK_PASSWORD || 'Mật khẩu không đúng!'

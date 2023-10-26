@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { UserRepository } from '../../repositories'
-import { enumData } from '../../constants'
+import { AUTHOR_ERROR, enumData } from '../../constants'
 
 @Injectable()
 export class AdminStrategy extends PassportStrategy(Strategy, 'admin') {
@@ -27,8 +27,8 @@ export class AdminStrategy extends PassportStrategy(Strategy, 'admin') {
         role: true,
       },
     })
-    if (!user) throw new UnauthorizedException('Không có quyền truy cập!')
-    if (user.__role__.code === enumData.Role.User.code) throw new UnauthorizedException('Không có quyền truy cập!')
+    if (!user) throw new UnauthorizedException(AUTHOR_ERROR)
+    if (user.__role__.code === enumData.Role.User.code) throw new UnauthorizedException(AUTHOR_ERROR)
     user.roleCode = user.__role__.code
     delete user.__role__
     return user

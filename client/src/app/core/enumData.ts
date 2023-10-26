@@ -1,6 +1,6 @@
 export const enumData = {
   /** Kích thước tối đa tính bằng MB */
-  maxSizeUpload: 10,
+  maxSizeUpload: 5*1024*1024,
   Page: {
     pageIndex: 1,
     pageSize: 10,

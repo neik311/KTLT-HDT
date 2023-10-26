@@ -11,6 +11,9 @@ export const NOT_YET_STORYNAME = 'Vui lòng nhập tên truyện'
 export const NOT_YET_STORYTYPE = 'Vui lòng chọn loại truyện'
 export const NOT_YET_CATEGORY = 'Vui lòng chọn danh mục'
 export const NOT_YET_AVATAR = 'Vui lòng chọn ảnh đại diện'
+export const ERR_FILE_IMAGE = 'File ảnh không đúng định dạng'
+export const ERR_FILE_UPLOAD = 'File ảnh vượt quá 5 mb'
+export const ERR_VALID_EMAIL = 'Email không đúng định dạng'
 
 
 export const ACTION_CREATE_SUCCESS = 'Thêm mới thành công!'

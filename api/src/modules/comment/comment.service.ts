@@ -67,7 +67,7 @@ export class CommentService {
 
   public async pagination(data: PaginationDto) {
     const whereCon: any = {}
-    if (data.where.isDeleted != undefined) whereCon.isDeleted = data.where.isDeleted
+    if (data.where.isDeleted != undefined) whereCon.isDeleted = data.where.isDeleted  
     if (data.where.storyId) whereCon.storyId = data.where.storyId
     if (data.where.userId) whereCon.storyId = data.where.userId
     whereCon.parentId = IsNull()

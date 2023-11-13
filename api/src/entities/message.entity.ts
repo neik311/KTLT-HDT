@@ -24,4 +24,19 @@ export class MessageEntity extends BaseEntity {
     nullable: true,
   })
   content: string
+
+  /** Bình luận cha */
+  @Column({
+    type: 'varchar',
+    length: 36,
+    nullable: true,
+  })
+  parentId: string
+  @ManyToOne(() => MessageEntity, (p) => p.children)
+  @JoinColumn({ name: 'parentId', referencedColumnName: 'id' })
+  parent: MessageEntity
+
+  /** ds bình luận con - 1 bình luận cha sẽ có thể có nhiều con */
+  @OneToMany(() => MessageEntity, (p) => p.parent)
+  children: Promise<MessageEntity[]>
 }

@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import { BaseEntity } from './base.entity'
 import { ApiProperty } from '@nestjs/swagger'
-import { StoryEntity } from '.'
+import { StoryEntity, WalletChapterEntity } from '.'
 
 /** Chương */
 @Entity({ name: 'chapter' })
@@ -36,6 +36,18 @@ export class ChapterEntity extends BaseEntity {
   })
   viewCount: number
 
+  @ApiProperty({ description: 'Giá bán' })
+  @Column({ nullable: false, type: 'decimal', precision: 12, scale: 4, default: 0 })
+  price: number
+
+  @ApiProperty({ description: 'Tiền tệ' })
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: false,
+  })
+  currency: string
+
   @ApiProperty({ description: '' })
   @Column({
     type: 'varchar',
@@ -46,4 +58,8 @@ export class ChapterEntity extends BaseEntity {
   @ManyToOne(() => StoryEntity, (p) => p.chapters)
   @JoinColumn({ name: 'storyId', referencedColumnName: 'id' })
   story: Promise<StoryEntity>
+
+  /** Danh sách chapter đã mua */
+  @OneToMany(() => WalletChapterEntity, (p) => p.chapter)
+  chapterBuyer: Promise<WalletChapterEntity[]>
 }

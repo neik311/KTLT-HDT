@@ -179,6 +179,10 @@ export class StoryService {
     return res
   }
 
+  public async dataSelect() {
+    return await this.repo.find({where:{isDeleted: false}, order:{createdAt:'DESC'}})
+  }
+
   /** Lấy một truyện */
   public async getStory(data: FilterOneDto) {
     const foundStory: any = await this.repo.findOne({

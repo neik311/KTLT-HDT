@@ -13,6 +13,8 @@ import { StoryModule } from './story/story.module'
 import { HistoryModule } from './history/history.module'
 import { FavoriteModule } from './favorite/favorite.module'
 import { ChapterModule } from './chapter/chapter.module'
+import { MessageModule } from './message/message.module'
+import { WalletModule } from './wallet/wallet.module'
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { ChapterModule } from './chapter/chapter.module'
     HistoryModule,
     FavoriteModule,
     ChapterModule,
+    MessageModule,
+    WalletModule
   ],
   controllers: [AppController],
   providers: [

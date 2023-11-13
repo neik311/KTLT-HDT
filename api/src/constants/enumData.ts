@@ -23,4 +23,10 @@ export const enumData = {
     Register: { code: 'register', name: 'Đăng ký' },
     ForgotPassword: { code: 'forgotPassword', name: 'Quên mật khẩu' },
   },
+
+  /** Loại nạp / rút */
+  WalletHistoryType: {
+    Deposit: { code: 'Deposit', name: 'Nạp tiền' },
+    Withdraw: { code: 'Withdraw', name: 'Rút tiền' },
+  },
 }

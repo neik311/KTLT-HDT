@@ -14,6 +14,7 @@ export const NOT_YET_AVATAR = 'Vui lòng chọn ảnh đại diện'
 export const ERR_FILE_IMAGE = 'File ảnh không đúng định dạng'
 export const ERR_FILE_UPLOAD = 'File ảnh vượt quá 5 mb'
 export const ERR_VALID_EMAIL = 'Email không đúng định dạng'
+export const ERR_DEPOSIT_MONEY = 'Số tiền cần lớn hơn 0'
 
 
 export const ACTION_CREATE_SUCCESS = 'Thêm mới thành công!'
@@ -22,3 +23,5 @@ export const ACTION_DELETE_SUCCESS = 'Xoá thành công!'
 export const ACTION_REGISTER_CONTINUE = 'Nhập mã xác thực qua email để tiếp tục'
 export const ACTION_REGISTER_SUCCESS = 'Đăng ký thành công'
 export const ACTION_LOGIN_SUCCESS = 'Đăng nhập thành công'
+export const ACTION_BUY_CHAPTER_SUCCESS = 'Mua chương thành công'
+export const ACTION_DEPOSIT_SUCCESS = 'Nạp tiền thành công '

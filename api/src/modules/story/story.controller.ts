@@ -18,6 +18,12 @@ export class StoryController {
     return await this.service.pagination(data)
   }
 
+  @ApiOperation({ summary: 'Lấy danh sách truyện (phân trang)' })
+  @Post('select')
+  public async dataSelect() {
+    return await this.service.dataSelect()
+  }
+
   @ApiOperation({ summary: 'Lấy chi tiết một truyện' })
   @Post('get_story')
   public async getStory(@Body() data: FilterOneDto) {

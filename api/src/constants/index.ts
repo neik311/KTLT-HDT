@@ -49,5 +49,10 @@ export const ERROR_DELETE_CATEGORY = process.env.ERROR_DELETE_CATEGORY || 'Danh 
 /** chapter error */
 export const ERROR_CHAPTER_NUMBER_TAKEN = process.env.ERROR_CHAPTER_NUMBER_TAKEN || 'Số thứ tự chapter đã tồn tại'
 
+/** wallet error */
+
+export const ERROR_WALLET_TRANSFER = process.env.ERROR_WALLET_TRANSFER || 'Hình thức giao dịch không hợp lệ'
+export const ERROR_WALLET_AMOUNT = process.env.ERROR_WALLET_AMOUNT || 'Số dư không đủ'
+
 
 export * from './enumData'

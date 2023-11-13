@@ -47,4 +47,10 @@ export const enumData = {
     word: { code: 'word', name: 'Truyện chữ' },
     comic: { code: 'comic', name: 'Truyện tranh' },
   },
+
+    /** Loại nạp / rút */
+    WalletHistoryType: {
+      Deposit: { code: 'Deposit', name: 'Nạp tiền' },
+      Withdraw: { code: 'Withdraw', name: 'Rút tiền' },
+    },
 }

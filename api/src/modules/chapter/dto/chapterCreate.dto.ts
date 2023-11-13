@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsString } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 
 /** Interface tạo chapter */
 export class ChapterCreateDto {
@@ -18,5 +18,15 @@ export class ChapterCreateDto {
   @ApiProperty({ description: '' })
   @IsString()
   @IsNotEmpty()
-  content: string
+  content: string 
+
+  @ApiProperty({ description: '' })
+  @IsNumber()
+  @IsOptional()
+  price: number
+
+  @ApiProperty({ description: '' })
+  @IsString()
+  @IsOptional()
+  currency: string
 }

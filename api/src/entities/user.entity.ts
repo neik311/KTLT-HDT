@@ -3,7 +3,7 @@ import { compare, hash } from 'bcrypt'
 import { BaseEntity } from './base.entity'
 import { PWD_SALT_ROUNDS } from '../constants'
 import { ApiProperty } from '@nestjs/swagger'
-import { FavoriteEntity, HistoryEntity, RoleEntity } from '.'
+import { WalletChapterEntity, FavoriteEntity, HistoryEntity, RoleEntity, WalletHistoryEntity } from '.'
 
 /** Tài khoản */
 @Entity({ name: 'user' })
@@ -47,6 +47,10 @@ export class UserEntity extends BaseEntity {
   })
   verified: boolean
 
+  @ApiProperty({ description: 'Số dư' })
+  @Column({ nullable: false, type: 'decimal', precision: 12, scale: 4, default: 0 })
+  amount: number
+
   @ApiProperty({ description: 'Loại user' })
   @Column({
     type: 'varchar',
@@ -66,9 +70,17 @@ export class UserEntity extends BaseEntity {
   @OneToMany(() => FavoriteEntity, (p) => p.user)
   favorites: Promise<FavoriteEntity[]>
 
+  /** Danh sách chapter đã mua */
+  @OneToMany(() => WalletChapterEntity, (p) => p.user)
+  chapters: Promise<WalletChapterEntity[]>
+
+  /** Lịch sử nạp rút */
+  @OneToMany(() => WalletHistoryEntity, (p) => p.user)
+  walletHistory: Promise<WalletHistoryEntity[]>
+
   /** Hàm tự động hash password khi save entity */
   @BeforeInsert()
-  @BeforeUpdate()
+  // @BeforeUpdate()
   async hashPassword() {
     if (this.password) {
       const hashedPassword = await hash(this.password, PWD_SALT_ROUNDS)

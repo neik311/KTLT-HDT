@@ -35,6 +35,8 @@ export class ChapterService {
       newChapter.content = data.content
       newChapter.name = data.name
       newChapter.storyId = data.storyId
+      newChapter.price = data.price
+      newChapter.currency = data.currency
       newChapter.createdBy = user.id
       newChapter.createdAt = new Date()
       await Promise.all([repo.save(newChapter), storyRepo.update({ id: isTakenStory.id }, { updatedAt: new Date(), updatedBy: user.id })])
@@ -55,6 +57,8 @@ export class ChapterService {
       foundChapter.chapterNumber = data.chapterNumber
       foundChapter.content = data.content
       foundChapter.name = data.name
+      foundChapter.price = data.price
+      foundChapter.currency = data.currency
       foundChapter.storyId = data.storyId
       foundChapter.updatedBy = user.id
       foundChapter.updatedAt = new Date()
@@ -106,7 +110,7 @@ export class ChapterService {
     const foundChapter: ChapterEntity = await this.repo.findOne({
       where: {
         id: data.id,
-        isDeleted: false,
+        // isDeleted: false,
       },
     })
     if (!foundChapter) throw new Error(ERROR_NOT_FOUND_DATA)
@@ -114,7 +118,7 @@ export class ChapterService {
       this.repo.find({
         where: {
           storyId: foundChapter.storyId,
-          isDeleted: false,
+          // isDeleted: false,
         },
         select: {
           id: true,
@@ -150,7 +154,22 @@ export class ChapterService {
       skip: data.skip,
       take: data.take,
       order: { chapterNumber: 'ASC' },
+      relations:{
+        chapterBuyer:true
+      }
     })
+
+    for(let item of res[0]){
+      item.chapterBuyerCount = item.__chapterBuyer__?.length || 0
+      let totalPrice = 0
+      if(item.__chapterBuyer__){
+        for(let chapterBuyer of item.__chapterBuyer__){
+          totalPrice += +chapterBuyer.price
+        }
+      }
+      item.totalPrice = totalPrice
+
+    }
     return res
   }
 

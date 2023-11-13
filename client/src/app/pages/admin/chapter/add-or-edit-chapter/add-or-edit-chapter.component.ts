@@ -86,6 +86,7 @@ export class AddOrEditChapterComponent implements OnInit, AfterViewInit {
       this.isCreate = false
       this.modalTitle = 'Chỉnh sửa chapter'
     }
+    this.dataObject.currency = 'USD' 
   }
 
   ngAfterViewInit() {
@@ -112,7 +113,9 @@ export class AddOrEditChapterComponent implements OnInit, AfterViewInit {
   }
 
   addData() {
-    this.apiService.post(this.apiService.CHAPTER.CREATE, this.dataObject).then((res: any) => {
+    const body = {...this.dataObject}
+    body.price = +body.price
+    this.apiService.post(this.apiService.CHAPTER.CREATE, body).then((res: any) => {
       if (res) {
         this.notifyService.showSuccess(enumData.Constants.Message_Create_Success)
         this.closeDialog(1)
@@ -121,7 +124,9 @@ export class AddOrEditChapterComponent implements OnInit, AfterViewInit {
   }
 
   updateData() {
-    this.apiService.post(this.apiService.CHAPTER.UPDATE, this.dataObject).then((res: any) => {
+    const body = {...this.dataObject}
+    body.price = +body.price
+    this.apiService.post(this.apiService.CHAPTER.UPDATE, body).then((res: any) => {
       if (res) {
         this.notifyService.showSuccess(enumData.Constants.Message_Update_Success)
         this.closeDialog(1)

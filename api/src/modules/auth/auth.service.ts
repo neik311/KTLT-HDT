@@ -51,7 +51,7 @@ export class AuthService {
     newUserEntity.createdBy = newUserEntity.username
     await this.repo.save(newUserEntity)
     newUserEntity.createdBy = newUserEntity.id
-    newUserEntity.password = data.password
+    // newUserEntity.password = data.password
     await Promise.all([this.repo.save(newUserEntity), this.emailService.sendEmailVerify({ email: newUserEntity.email })])
     return { message: CREATE_SUCCESS }
   }
@@ -59,7 +59,7 @@ export class AuthService {
   public async login(data: UserLoginDto) {
     if (!data.email && !data.username) throw new Error(ERROR_INPUT_EMAIL_USERNAME)
     if (!data.password) throw new Error(ERROR_INPUT_EMAIL_PASSWORD)
-    const foundUser: any = await this.repo.findOne({ where: [{ email: data.email }, { username: data.username }], relations: { role: true } })
+    const foundUser: any = await this.repo.findOne({ where: [{ email: data.email }, { username: data.username }], relations: { role: true, chapters: true } })
     if (!foundUser) throw new Error(ERROR_NOT_FOUND_DATA)
     if (foundUser.isDeleted === true) throw new Error(ERROR_LOCK_ACCOUNT)
     if (foundUser.verified === false) throw new Error(ERROR_VERIFY_ACCOUNT)
@@ -68,8 +68,10 @@ export class AuthService {
     if (!isPasswordMatch) throw new UnauthorizedException(ERROR_CHECK_PASSWORD)
     foundUser.roleCode = foundUser?.__role__?.code
     foundUser.roleName = foundUser?.__role__?.name
+    foundUser.lstChapter = foundUser.__chapters__?.map((chapter) => chapter.chapterId) || []
     delete foundUser.password
     delete foundUser.__role__
+    delete foundUser.__chapters__
     return { ...foundUser, accessToken: this.jwtService?.sign({ uid: foundUser.id }) }
   }
 
@@ -111,12 +113,14 @@ export class AuthService {
 
   /** Lấy thông tin một người dùng */
   public async getInfoUser(user: UserDto) {
-    const foundUser: any = await this.repo.findOne({ where: { id: user.id, isDeleted: false, verified: true }, relations: { role: true } })
+    const foundUser: any = await this.repo.findOne({ where: { id: user.id, isDeleted: false, verified: true }, relations: { role: true,chapters: true } })
     if (!foundUser) return null
     foundUser.roleCode = foundUser.__role__.code
     foundUser.roleName = foundUser.__role__.name
+    foundUser.lstChapter = foundUser.__chapters__?.map((chapter) => chapter.chapterId) || []
     delete foundUser.password
     delete foundUser.__role__
+    delete foundUser.__chapters__
     return foundUser
   }
 
